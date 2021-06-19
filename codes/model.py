@@ -4,6 +4,7 @@ from torch_geometric.nn import global_mean_pool
 import torch.nn.functional as F
 import torch
 
+
 class GCN(torch.nn.Module):
     def __init__(self, hidden_channels, dataset):
         super(GCN, self).__init__()
@@ -14,7 +15,7 @@ class GCN(torch.nn.Module):
         self.lin = Linear(hidden_channels, dataset.num_classes)
 
     def forward(self, x, edge_index, batch):
-        # 1. Obtain node embeddings 
+        # 1. Obtain node embeddings
         x = self.conv1(x, edge_index)
         x = x.relu()
         x = self.conv2(x, edge_index)
@@ -27,5 +28,5 @@ class GCN(torch.nn.Module):
         # 3. Apply a final classifier
         x = F.dropout(x, p=0.5, training=self.training)
         x = self.lin(x)
-        
+
         return x

@@ -1,4 +1,5 @@
 codes/__pycache__/
 .virtual_documents/
 .ipynb_checkpoints/
+.vscode/
 notebooks/data/
