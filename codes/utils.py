@@ -18,7 +18,7 @@ import math
 from PIL import Image
 
 
-def no_preferential_attachment(n, m):
+def no_preferential_attachment(n, m, seed=None):
     """
     優先的選択がないバラバシアルバートグラフ
 
@@ -36,6 +36,7 @@ def no_preferential_attachment(n, m):
     G : networkx graph
 
     """
+    np.random.seed(seed)
 
     G = nx.empty_graph(m)  # generate m nodes empty graph
 
@@ -51,7 +52,7 @@ def no_preferential_attachment(n, m):
     return G
 
 
-def no_growth_barabasi(n, step):
+def no_growth_barabasi(n, step, seed=None):
     """
     成長のないバラバシアルバートグラフ
 
@@ -68,6 +69,8 @@ def no_growth_barabasi(n, step):
     -------
     G : networkx graph
     """
+    np.random.seed(seed)
+
     G = nx.empty_graph(n)  # generate n nodes empty graphe
 
     def select_by_degree(G):
@@ -95,7 +98,7 @@ def no_growth_barabasi(n, step):
     return G
 
 
-def degree_hist(G, ax, log=False, bins=50, alpha=1, color="r", label=None):
+def degree_hist(G, ax, log=False, bins=50):
     """次数分布を作成
 
     Parameter
@@ -115,22 +118,15 @@ def degree_hist(G, ax, log=False, bins=50, alpha=1, color="r", label=None):
     if log:
         # データ範囲の最大値 = log10(ノード数)
         num = math.log10(nx.number_of_nodes(G))
-        ax.hist(
-            degs,
-            bins=np.logspace(0, num, bins),
-            density=True,
-            alpha=alpha,
-            color=color,
-            label=label,
-        )
+        ax.hist(degs, bins=np.logspace(0, num, bins), density=True)
         ax.set_xscale("log")  # x scale to log
         ax.set_yscale("log")  # y scale to log
     # 線形
     else:
-        ax.hist(degs, bins, density=True, alpha=alpha, color=color, label=label)
+        ax.hist(degs, bins, density=True)
 
 
-def network_to_image(G, sort=False):
+def network_to_image(G, sort=False, shuffle=False, seed=None):
     """ネットワークを画像データに変換する
 
     ネットワークの隣接行列を作成し、
@@ -141,6 +137,10 @@ def network_to_image(G, sort=False):
     ----------
     G : networkx.graph.Graph
         単純グラフ
+    sort : bool
+        次数順にソートを行う (default=False)
+    shuffle : bool
+         シャッフルする (default=False)
     Returns
     -------
     PIL.Image
@@ -161,6 +161,17 @@ def network_to_image(G, sort=False):
         A = A[sort_nodes, :]
         return A
 
+    def _shuffle(A, seed=None):
+        # 配列をシャッフルする
+        shuffle_nodes = list(range(len(G.nodes)))
+        np.random.seed(seed)
+        np.random.shuffle(shuffle_nodes)
+
+        A = A[:, shuffle_nodes]
+        A = A[shuffle_nodes, :]
+
+        return A
+
     assert type(G) == nx.Graph, "input graph must be networkx.Graph"
 
     # 隣接行列の作成
@@ -168,6 +179,9 @@ def network_to_image(G, sort=False):
 
     if sort:
         A = _sort_by_degree(A, G)
+
+    if shuffle:
+        A = _shuffle(A, seed)
 
     # array to image
     img = Image.fromarray(A * 255).convert("L")

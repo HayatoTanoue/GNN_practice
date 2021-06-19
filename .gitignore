@@ -1,4 +1,4 @@
-__pycache__/
+codes/__pycache__/
 .virtual_documents/
 .ipynb_checkpoints/
-note_books/data/
+notebooks/data/
