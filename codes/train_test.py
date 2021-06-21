@@ -8,7 +8,7 @@ def make_x(data):
     if data.x is None:
         G = to_networkx(data)
         data.x = torch.tensor(
-            np.array([list(nx.degree_centrality(G).values())]).T
+            np.array([[d] for d in list(nx.degree_centrality(G).values())])
         ).float()
     return data
 

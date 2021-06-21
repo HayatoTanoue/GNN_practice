@@ -3,3 +3,5 @@ codes/__pycache__/
 .ipynb_checkpoints/
 .vscode/
 notebooks/data/
+my_data/
+train_data/
