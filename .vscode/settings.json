@@ -1,10 +1,10 @@
 {
-    "git.ignoreLimitWarning": true,
-    "python.pythonPath": "/opt/conda/bin/python",
-    "python.linting.pylintEnabled": false,
+  "git.ignoreLimitWarning": true,
+  "python.pythonPath": "/opt/conda/bin/python",
+  "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.linting.flake8Args": [
-    "--ignore=E402,E501, F401"
+    "--ignore=E402,E501, F401, E722, F811"
   ],
   "python.formatting.provider": "black",
   "python.formatting.autopep8Args": [
@@ -17,7 +17,7 @@
     "editor.formatOnSave": true
   },
   "python.autoComplete.extraPaths": [
-    "/opt/conda/lib/python/site-packages/",
+    "/opt/conda/lib/python3.8/site-packages",
   ],
   "editor.formatOnSave": true
 }
