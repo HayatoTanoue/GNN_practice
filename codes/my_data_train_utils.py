@@ -46,6 +46,7 @@ def make_datasets(batch_size=32, split_rate=0.7):
     return train_data_loader, test_data_loader
 
 
+
 def make_x(data, x=None):
     if data.x is None:
         G = to_networkx(data)
