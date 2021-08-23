@@ -13,7 +13,7 @@ from torch_geometric.utils import from_networkx, to_networkx
 from torch_geometric.data import DataLoader
 
 
-def data_from_adjlist(path, label, x=None):
+def data_from_adjlist(path, label, x="degree"):
     G = nx.read_adjlist(path)
     data = from_networkx(G)
     if x == "degree_center":
@@ -44,7 +44,6 @@ def make_datasets(batch_size=32, split_rate=0.7):
     test_data_loader = DataLoader(test_data_list, batch_size=batch_size, shuffle=False)
 
     return train_data_loader, test_data_loader
-
 
 
 def make_x(data, x=None):

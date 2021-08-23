@@ -1,0 +1,3 @@
+,model,node,p_s,optimizer,weight_decay,adam_lr,best_acc
+0,GCN,100,poisson,Adam,6.408172583369478e-10,0.011448533338693107,0.46265
+1,DGCNN,100,poisson,Adagrad,8.467072524580579e-09,0.0029910888915706062,0.9145

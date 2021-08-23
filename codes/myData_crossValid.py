@@ -59,7 +59,7 @@ class Solver(object):
         # set node attribute
         if x == "degree_center":
             data.x = torch.tensor(
-                [[d] for d in list(dict(nx.degree_centrality(G)).values())],
+                [[d] for d in list(dict(G.degree()).values())],
                 dtype=torch.float,
             )
         else:
@@ -77,11 +77,11 @@ class Solver(object):
 
         # self.model = DGCNN_Model(self.num_node_feature, self.num_classes)
         self.model.to(self.device)
-        self.optimizer = torch.optim.Adagrad(
-            self.model.parameters(), lr=self.lr, eps=self.eps
-        )
+        # self.optimizer = torch.optim.Adagrad(
+        #     self.model.parameters(), lr=self.lr, eps=self.eps
+        # )
 
-        # self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
 
         self.criterion = torch.nn.CrossEntropyLoss()
 
