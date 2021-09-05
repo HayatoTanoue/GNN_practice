@@ -1,16 +1,24 @@
 from torch.nn import Linear
 from torch_geometric.nn import GCNConv, GATConv
-from torch_geometric.nn import global_mean_pool
+from torch_geometric.nn import global_mean_pool, global_add_pool
 import torch.nn.functional as F
 import torch
 
 
 class GCN(torch.nn.Module):
     def __init__(
-        self, hidden_channels, dataset=None, num_classes=4, num_node_feature=1
+        self,
+        hidden_channels,
+        dataset=None,
+        num_classes=4,
+        num_node_feature=1,
+        pooling="mean",
     ):
         super(GCN, self).__init__()
         torch.manual_seed(12345)
+
+        self.pooling = pooling
+
         if dataset is not None:
             if dataset.num_node_features == 0:
                 self.conv1 = GCNConv(1, hidden_channels)
@@ -38,8 +46,12 @@ class GCN(torch.nn.Module):
         x = self.conv3(x, edge_index)
 
         # 2. Readout layer
-        x = global_mean_pool(x, batch)  # [batch_size, hidden_channels]
+        # x = global_mean_pool(x, batch)  # [batch_size, hidden_channels]
 
+        if self.pooling == "mean":
+            x = global_mean_pool(x, batch)
+        else:
+            x = global_add_pool(x, batch)
         # 3. Apply a final classifier
         x = F.dropout(x, p=0.5, training=self.training)
         x = self.lin(x)
