@@ -51,6 +51,8 @@ def cv_train(model, loader, device, criterion, optimizer, model_name="GCN"):
             )  # Perform a single forward pass.
         elif model_name == "DGCNN":
             out = model(data)  # Perform a single forward pass.
+        elif model_name == "GIN":
+            out = model(data)
         loss = criterion(out, data.y)  # Compute the loss.
         loss.backward()  # Derive gradients.
         optimizer.step()  # Update parameters based on gradients.
@@ -70,6 +72,8 @@ def cv_test(model, loader, device, model_name="GCN"):
             )  # Perform a single forward pass.
         elif model_name == "DGCNN":
             out = model(data)  # Perform a single forward pass.
+        elif model_name == "GIN":
+            out = model(data)
         pred = out.argmax(dim=1)  # Use the class with highest probability.
         correct += int((pred == data.y).sum())  # Check against ground-truth labels.
 
